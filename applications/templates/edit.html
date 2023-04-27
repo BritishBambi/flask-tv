@@ -18,22 +18,22 @@
                         </div>
                         {% endfor %}
                         {% else %}
-                        {{ form.title(class="form-control form-control-sm") }}
+                        {{ form.title(class="form-control form-control-sm", value = entry.title) }}
                         {% endif %}
                     </div>
             
                     <div class="form-group">
                         {{ form.genre.label(class = "form-control-label") }}
-                        {{ form.genre(class = "form-control form-control-sm") }}
+                        {{ form.genre(class = "form-control form-control-sm", selected = entry.genre) }}
                     </div>
             
                     <div class="form-group">
                         {{ form.rating.label(class = "form-control-label") }}
-                        {{ form.rating(class = "form-control form-control-sm") }}
+                        {{ form.rating(class = "form-control form-control-sm", selected = entry.rating) }}
                     </div>
                     <div class="form-group">
                         {{ form.image_url.label(class = "form-control-label") }}
-                        {{ form.image_url(class = "form-control form-control-sm") }}
+                        {{ form.image_url(class = "form-control form-control-sm", value = entry.image_url) }}
                     </div>
             
                     <div class="form-group border-bottom pb-3">

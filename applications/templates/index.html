@@ -2,6 +2,9 @@
 {% block content %}
 <div class="col-sm-10 ml-auto mr-auto ">
     <H2 class="text-center">TV Show List</H2>
+    <div class="col-sm-6 text-center ">
+        <canvas id="genreChart"></canvas>
+    </div>
     <div class="row">
             {% for entry in entries %}
             <div class="col-4 text-center">
@@ -15,5 +18,58 @@
              {% endfor %}
         </div>
 </div>
+
+<script>
+    const data = {{data | tojson}}
+    const ctx = document.getElementById('genreChart')
+    const labels = data.map(d => d.genre)
+    const colours = ['lightblue', 'pink', 'orange', 'purple']
+    console.log(labels)
+    console.log(data[0].genre)
+    let genreCount = {}
+    for (let i = 0; i < data.length; i++) {
+        if (genreCount[data[i].genre]) {
+            genreCount[data[i].genre] = genreCount[data[i].genre] + 1
+        } else {
+            genreCount[data[i].genre] = 1
+        }        
+    }
+    let keys = []
+    for (let k in genreCount) {
+        keys.push(k)
+    }
+    console.log(keys)
+
+    console.log(genreCount)
+    const values = Object.values(genreCount)
+    console.log(values)
+
+    // const amounts = genreCount.map()
+
+    const chartData ={
+        labels: keys,
+        datasets:[{
+            labels: 'Genre',
+            data: values,
+            backgroundColor: colours,
+            borderColor: "black",
+            borderWidth: 1,
+        }]
+    }
+
+    // const chartOptions = {
+    // scales:{
+    //     y:{
+    //         beginAtZero: true
+    //     }
+    // }
+    //   }
+
+  const genreChart = new Chart(ctx, {
+    type: 'pie',
+    data: chartData,
+    // options: chartOptions
+  })
+</script>
 
 {% endblock %}

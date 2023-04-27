@@ -6,7 +6,11 @@ from applications.models import TVShow
 @app.route('/')
 def index():
     entries = TVShow.query.order_by(TVShow.title.asc()).all()
-    return render_template('index.html', entries=entries)
+    genres = TVShow.query.all()
+    data = [d.__dict__ for d in genres]
+    for item in data:
+        item.pop('_sa_instance_state', None)
+    return render_template('index.html', entries=entries, data=data)
 
 @app.route('/add' , methods = ['GET', 'POST'])
 def add_tvshow():
@@ -22,8 +26,8 @@ def add_tvshow():
 @app.route('/edit/<int:entry_id>' , methods = ['GET', 'POST'])
 def edit_tvshow(entry_id):
     form = NewShowForm()
+    entry = TVShow.query.get_or_404(entry_id)
     if form.validate_on_submit():
-        entry = TVShow.query.get_or_404(entry_id)
         entry.title = request.form.get('title')
         entry.genre = request.form.get('genre')
         entry.rating = request.form.get('rating')
@@ -31,7 +35,7 @@ def edit_tvshow(entry_id):
         db.session.commit()
         flash(f"Edited {form.title.data} in the database", "success")
         return redirect(url_for('index'))
-    return render_template('edit.html', form = form)
+    return render_template('edit.html', entry = entry, form = form)
 
 
 
